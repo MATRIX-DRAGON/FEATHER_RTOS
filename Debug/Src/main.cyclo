@@ -1,0 +1,4 @@
+../Src/main.c:12:6:user_thread_a	2
+../Src/main.c:32:6:user_thread_b	2
+../Src/main.c:51:6:user_thread_c	2
+../Src/main.c:72:5:main	1

@@ -1,0 +1,11 @@
+C:/Users/ronyp/Desktop/PROJERCS/RPC_RTOS/COD_WS/FEATHER_RTOS/Inc/chip_headers/CMSIS/Include/core_cm4.h:1814:22:__NVIC_SetPriority	2
+../Src/kernal_src/user_os_kernal.c:65:6:os_kernal_stack_init	1
+../Src/kernal_src/user_os_kernal.c:97:9:os_kernal_add_thread	1
+../Src/kernal_src/user_os_kernal.c:134:6:os_kernel_init	1
+../Src/kernal_src/user_os_kernal.c:140:6:os_kernal_lanch	1
+../Src/kernal_src/user_os_kernal.c:166:28:SysTick_Handler	1
+../Src/kernal_src/user_os_kernal.c:203:28:os_scheduler_launch	1
+../Src/kernal_src/user_os_kernal.c:230:6:os_thread_yeald	1
+../Src/kernal_src/user_os_kernal.c:241:6:os_spinlock_init	1
+../Src/kernal_src/user_os_kernal.c:246:6:os_spinlock_set	1
+../Src/kernal_src/user_os_kernal.c:253:6:os_spinlock_wait	2
