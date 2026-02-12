@@ -1,5 +1,0 @@
-../Src/user_app_src/user_uart.c:23:5:__io_putchar	1
-../Src/user_app_src/user_uart.c:31:6:uart_tx_init	1
-../Src/user_app_src/user_uart.c:60:17:uart_compute_br	1
-../Src/user_app_src/user_uart.c:65:13:set_uart_baudrate	1
-../Src/user_app_src/user_uart.c:70:13:uart_write	2

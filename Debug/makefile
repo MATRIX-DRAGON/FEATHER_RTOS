@@ -9,10 +9,10 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include User_App/user_app_src/subdir.mk
 -include Startup/subdir.mk
--include Src/user_app_src/subdir.mk
--include Src/kernal_src/subdir.mk
 -include Src/subdir.mk
+-include Feather_Kernal/kernal_src/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

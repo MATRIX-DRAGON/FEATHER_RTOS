@@ -22,8 +22,8 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-Src/kernal_src \
+Feather_Kernal/kernal_src \
 Src \
-Src/user_app_src \
 Startup \
+User_App/user_app_src \
 

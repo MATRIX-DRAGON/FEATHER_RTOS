@@ -5,29 +5,23 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/main.c \
-../Src/syscalls.c \
-../Src/sysmem.c 
+../Feather_Kernal/kernal_src/user_os_kernal.c 
 
 OBJS += \
-./Src/main.o \
-./Src/syscalls.o \
-./Src/sysmem.o 
+./Feather_Kernal/kernal_src/user_os_kernal.o 
 
 C_DEPS += \
-./Src/main.d \
-./Src/syscalls.d \
-./Src/sysmem.d 
+./Feather_Kernal/kernal_src/user_os_kernal.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Src/%.o Src/%.su Src/%.cyclo: ../Src/%.c Src/subdir.mk
+Feather_Kernal/kernal_src/%.o Feather_Kernal/kernal_src/%.su Feather_Kernal/kernal_src/%.cyclo: ../Feather_Kernal/kernal_src/%.c Feather_Kernal/kernal_src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407xx -c -I"C:/Users/ronyp/Desktop/PROJERCS/RPC_RTOS/COD_WS/FEATHER_RTOS/Feather_Kernal/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -I"C:/Users/ronyp/Desktop/PROJERCS/RPC_RTOS/COD_WS/FEATHER_RTOS/Feather_Kernal/chip_headers/CMSIS/Include" -I"C:/Users/ronyp/Desktop/PROJERCS/RPC_RTOS/COD_WS/FEATHER_RTOS/Feather_Kernal/kernal_inc" -I"C:/Users/ronyp/Desktop/PROJERCS/RPC_RTOS/COD_WS/FEATHER_RTOS/User_App/user_app_inc" -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
-clean: clean-Src
+clean: clean-Feather_Kernal-2f-kernal_src
 
-clean-Src:
-	-$(RM) ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/syscalls.cyclo ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.cyclo ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
+clean-Feather_Kernal-2f-kernal_src:
+	-$(RM) ./Feather_Kernal/kernal_src/user_os_kernal.cyclo ./Feather_Kernal/kernal_src/user_os_kernal.d ./Feather_Kernal/kernal_src/user_os_kernal.o ./Feather_Kernal/kernal_src/user_os_kernal.su
 
-.PHONY: clean-Src
+.PHONY: clean-Feather_Kernal-2f-kernal_src
 
