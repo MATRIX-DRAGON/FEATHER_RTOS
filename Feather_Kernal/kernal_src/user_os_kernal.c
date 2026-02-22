@@ -60,6 +60,8 @@ int32_t tcb_stack[NUM_OF_THREADS][STACK_SIZE];
 | R4              |                              |
 -------------------------------------------------
 ↓  PSP (saved in TCB_A) will be pointing to R4
+   since it will be lowest adress from top
+   and that will be where the sp will point last
 
 */
 void os_kernal_stack_init(int i)
@@ -183,7 +185,7 @@ __attribute__((naked))void SysTick_Handler(void)
 	/*store cortex-M SP at address equals r1 ,i.e. save SP into tcb*/
 	__asm("STR SP,[R1]");
 
-	//////*choose and load the next thread*///////
+	//////*now to choose and load the next thread*///////
 
 	/*load r1 from a location 4-bytes above address r1 , i.e. r1=currentpt->next */
 	__asm("LDR R1,[R1,#4]");
