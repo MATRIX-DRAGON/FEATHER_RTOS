@@ -61,8 +61,8 @@ all: main-build
 main-build: FEATHER_RTOS.elf secondary-outputs
 
 # Tool invocations
-FEATHER_RTOS.elf FEATHER_RTOS.map: $(OBJS) $(USER_OBJS) C:\Users\ronyp\Desktop\PROJERCS\RPC_RTOS\COD_WS\FEATHER_RTOS\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "FEATHER_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\ronyp\Desktop\PROJERCS\RPC_RTOS\COD_WS\FEATHER_RTOS\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FEATHER_RTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+FEATHER_RTOS.elf FEATHER_RTOS.map: $(OBJS) $(USER_OBJS) C:\Users\ronyp\Desktop\GIT_PROJECTS\PROTO_PROJECTS\RTOS\FEATHER_RTOS\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "FEATHER_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\ronyp\Desktop\GIT_PROJECTS\PROTO_PROJECTS\RTOS\FEATHER_RTOS\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="FEATHER_RTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

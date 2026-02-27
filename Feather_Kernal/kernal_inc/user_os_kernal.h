@@ -33,4 +33,5 @@ extern void os_spinlock_set(uint32_t *spinlock);
 /*this is to wait while the semaphore is locked*/
 extern void os_spinlock_wait(uint32_t *spinlock);
 
+
 #endif /* USER_OS_KERNAL_H_ */

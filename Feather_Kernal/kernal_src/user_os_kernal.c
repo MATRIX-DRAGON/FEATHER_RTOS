@@ -168,38 +168,73 @@ void os_kernal_lanch(uint32_t quanta)
 __attribute__((naked))void SysTick_Handler(void)
 {
 	/*the folowing asembly code will be writen wrt GNU ASSEMBLY PROGRAMING FOR ARM */
-	/*when exception occurs (stack frame)
+	/*
+	 * when exception occurs (stack frame)
 	 * r0,r1,r2,r3,r12,LR,PSR
-	 *  are automatically pushed to stack */
+	 *  are automatically pushed to stack
+	 *  NOTE: they are pushed onto PSP because thread mode is using PSP
+	*/
 
 	//////*suspend and save the currend thread*//////
 
 	/*disable global interupt*/
 	__asm("CPSID I");
-	/*save r4,r5,r6,r7,r8,r9,r10,r11*/
-	__asm("push {R4-R11}");
+
+	/*get current thread stack pointer (PSP) ie handler mode
+	 *  is using MSP, so we must manually read PSP */
+	__asm("MRS R0, PSP");
+
+	/*save r4,r5,r6,r7,r8,r9,r10,r11 onto thread stack (PSP)
+	 * ie this is saving callee-saved registers manually */
+	__asm("STMDB R0!, {R4-R11}");
+
 	/*load address of currentpt into r0*/
-	__asm("LDR R0,=currentpt");
+	__asm("LDR R1,=currentpt");
 	/*load r1 from address equals r0 , i.e. r1=currentpt */
-	__asm("LDR R1,[R0]");
-	/*store cortex-M SP at address equals r1 ,i.e. save SP into tcb*/
-	__asm("STR SP,[R1]");
+	__asm("LDR R2,[R1]");
+	/*store cortex-M PSP (Stored in R0 now) in the address equals R2 ,
+	 * i.e. save SP into tcb and this stores UPDATED PSP (after pushing R4-R11) */
+	__asm("STR R0,[R2]");
 
 	//////*now to choose and load the next thread*///////
 
-	/*load r1 from a location 4-bytes above address r1 , i.e. r1=currentpt->next */
-	__asm("LDR R1,[R1,#4]");
-	/*store r1 at address equals r0, i.e. currentpt = r1 */
-	__asm("STR R1,[R0]");
-	/*load cortex-m SP from address equals r1, i.e. SP= currentpt->stackpt */
-	__asm("LDR SP,[R1]");
-	/*restore r4,r5,r6,r7,r8,r9,r10,r11 from the given task stack*/
-	__asm("POP {R4-R11}");
+	/*load r2 from a location 4-bytes above address r1 , i.e. r2=currentpt->next */
+	__asm("LDR R2,[R2,#4]");
+	/*store r2 in the address equals r1, i.e. currentpt = r2 */
+	__asm("STR R2,[R1]");
+	/*load cortex-m PSP(held in R0) from address equals r2, i.e. PSP= currentpt->stackpt */
+	__asm("LDR R0,[R2]");
+	/*restore r4,r5,r6,r7,r8,r9,r10,r11 from the given task stack
+	 * hence this restores callee-saved registers of next task */
+	 __asm("LDMIA R0!,{R4-R11}");
+	 /*update PSP so hardware can pop remaining registers on exception return*/
+	 __asm("MSR PSP,R0");
+
 	/*enable global interupts*/
 	__asm("CPSIE I");
 
-	//////*return from exeption and restore r0,r1,r2,r3,r12,LR,PSR *//////
+	/*return from exeption and restore r0,r1,r2,r3,r12,LR,PSR
+	 * BX LR with LR=0xFFFFFFFD causes return to thread mode using PSP*/
 	__asm("BX LR");
+}
+
+__attribute__((naked))void switch_sp_to_psp(void)
+{
+	/*initialise psp with tsk-1 initial stack pt */
+	__asm("MSR PSP, R3") ;// set PSP to task stack pointer
+
+	/*change the sp to psp using CONTROL register*/
+
+	/*read CONTROL*/
+	__asm("MRS R0, CONTROL") ;
+	/*set bit 1: SPSEL = 1 → use PSP*/
+	__asm("ORR R0, R0, #2") ;
+	/*now we are basically writing CONTROL.SPSEL = 1*/
+	__asm("MSR CONTROL, R0") ;
+
+	__asm("ISB") ; //synchronize change
+	__asm("BX LR") ;
+
 }
 
 __attribute__((naked))void os_scheduler_launch(void)
@@ -210,18 +245,27 @@ __attribute__((naked))void os_scheduler_launch(void)
 	__asm("LDR R2,[R0]");
 	/*load cortex-M SP from address equals r2  , i.e. SP = currentpt->stackpt */
 	__asm("LDR SP,[R2]");
+
+	/*storing the value of curent stack pointer to R3
+	 *  to transfer to nect finction call using R3 register*/
+	__asm("LDR R3,[R2]");
+	/* we have to branch with link to switch SP to PSP  */
+	__asm("BL switch_sp_to_psp");
+
 	/*restore r4,r5,r6,r7,r8,r9,r10,r11 from the given task stack*/
 	__asm("POP {R4-R11}");
 	/*restore r12 ir LR */
 	__asm("POP {R12}");
 	/*restore r0,r1,r2,r3 */
 	__asm("POP {R0-R3}");
+
 	/*skip LR */
 	__asm("ADD SP,SP,#4");
 	/*create a new start location by poping LR */
 	__asm("POP {LR}");
 	/*skip PSR by adding 4 to SP*/
 	__asm("ADD SP,SP,#4");
+
 	/*enable global interupts*/
 	__asm("CPSIE I");
 	/*return from exeption */
@@ -263,3 +307,4 @@ void os_spinlock_wait(uint32_t *spinlock)
 	*spinlock -= 1;
 	__enable_irq();
 }
+
