@@ -22,7 +22,7 @@ void user_thread_a(void)
 				i++;
 			}
 
-			printf("led ON thread a running \n\r");
+			printf("led ON linux thread a running \n\r");
 			os_spinlock_set(&spinlock_2);
 			//os_thread_yeald();
 
@@ -36,13 +36,13 @@ void user_thread_b(void)
 		    os_spinlock_wait(&spinlock_2);
 			task_profile_b++;
 			led_off();
-			i=0;
+ 			i=0;
 			while(i<1000)
 			{
 				i++;
 			}
 
-			printf("led OFF task b running  \n\r");
+			printf("led OFF linux task b running  \n\r");
 			os_spinlock_set(&spinlock_3);
 			//os_thread_yeald();
 		}
@@ -61,7 +61,7 @@ void user_thread_c(void)
 				i++;
 			}
 
-			printf("led ON task c running \n\r");
+			printf("led ON linux task c running \n\r");
 			os_spinlock_set(&spinlock_1);
 			//os_thread_yeald();
 
